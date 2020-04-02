@@ -22,6 +22,7 @@ const AppContainer = styled.div`
   text-align: start;
   float: right;
   position: sticky;
+  top: 10px;
   
 `;
 
@@ -66,6 +67,7 @@ const Label = styled.div`
 const DateWrapper = styled.div`
   width: 100%;
   margin-right: 6px;
+  position: relative;
 `;
 
 const TimeWrapper = styled.div`
@@ -73,11 +75,26 @@ const TimeWrapper = styled.div`
   margin-left: 6px;
 `;
 
-const ReserveButtonWrapper = styled.div`
+const ReserveWrapper = styled.div`
   margin-top: 16px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  /* position: relative; */
 `;
+// const StyledButton = styled.button`
+//   border: none;
+//   padding: 12px 16px 12px 16px;
+//   background-color: #da3743;
+//   color: #fff;
+//   cursor: pointer;
+//   width: 100%;
+//   &:hover {
+//     opacity: 75%;
+//   }
+//   /* height: 100%; */
+
+// `;
 
 class App extends Component {
   constructor(props) {
@@ -86,10 +103,14 @@ class App extends Component {
       dateSelected: '',
       partySelected: null, 
       timeSelected: null,
+      restaurant: {},
+      showButton: true,
     };
     this.onDateClick = this.onDateClick.bind(this);
     this.onPartySelect = this.onPartySelect.bind(this);
     this.onTimeSelect = this.onTimeSelect.bind(this);
+    this.findTable = this.findTable.bind(this);
+    this.onButtonClick = this.onButtonClick.bind(this);
   }
   onDateClick(date) {
     this.setState({
@@ -106,23 +127,32 @@ class App extends Component {
       timeSelected: time,
     })
   }
+
+  onButtonClick() {
+    this.setState({
+      showButton: !this.state.showButton,
+    })
+  }
   componentDidMount() {
     this.getRestaurant(Math.floor(Math.random() * 100));
   }
 
   getRestaurant(id) {
     models.reservations.get(id)
-    .then((restaurants) => {
-      console.log('resos', restaurants)
+    .then((restaurant) => {
+      console.log('resos', restaurant, typeof restaurant)
       this.setState({
-        restaurants,
+        restaurant,
       });
     });
   }
 
-  // findTable(this.state) {
-
-  // } 
+  findTable() {
+    this.setState({
+      showButton: false
+    })
+    console.log('clicked')
+  } 
 
   render() {
     return (
@@ -147,10 +177,13 @@ class App extends Component {
                 </TimeWrapper>
               </DateTimeWrapper>
             </InputBox>
-            <ReserveButtonWrapper>
-            {/* <TimesList timeSelected={this.state.timeSelected}/> */}
-                <Button findTable={this.findTable}/>
-            </ReserveButtonWrapper>
+            <ReserveWrapper>
+                {/* <TimesList timeSelected={this.state.timeSelected}/> */}
+                {/* <StyledButton onClick={this.findTable}>Find a Table</StyledButton> */}
+                {this.state.showButton && <Button show={this.onButtonClick}/>}
+                {!this.state.showButton && <TimesList timeslots={this.state.restaurant.timeslots} date={this.state.dateSelected} party={this.state.partySelected} time={this.state.timeSelected} restaurant={this.state.restaurant}/>}
+                {/* <Button show={this.onButtonClick}/> */}
+            </ReserveWrapper>
           </Box>
         </AppContainer>
     )

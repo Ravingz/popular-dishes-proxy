@@ -31,6 +31,11 @@ const StyledChevronRight = styled(ChevronRight)`
 `;
 
 const CalendarWrapper = styled.div`
+    width: 288px;
+    height: 130px;
+    position: fixed;
+    background-color: white;
+    z-index: 1;
     /* padding-top: 16px;
     padding-bottom: 16px;
     margin-left: 1px;
@@ -53,13 +58,17 @@ const Header = styled.div`
     text-transform: uppercase;
     font-weight: 400;
     font-size: 75%;
+    height: 30px;
+    padding-top: 10px;
 `;
 
 const Column = styled.div`
+    height: 20px;
     display: flex;
     flex-wrap: wrap;
     /* justify-content: left; */
     flex-direction: row;
+    justify-content: space-around;
     /* width: 100%; */
     /* font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     font-size: 1em;
@@ -78,11 +87,12 @@ const Row = styled.div`
     width: 100%;
 `;
 
-const Days = styled.span`
+const Days = styled.div`
     text-transform: uppercase;
-    font-weight: 700;
-    color: gray;
-    font-size: 70%;
+    font-weight: 200;
+    /* color: gray; */
+    font-size: 75%;
+    /* text-align: center; */
     /* display: flex; */
     /* display: flex;
     flex-direction: column; */
@@ -109,6 +119,12 @@ const Cell = styled.span`
     max-width: 100%;
     justify-content: center;
     text-align: center;
+    &.disabled {
+        opacity: .5;
+    }
+    &.selected {
+        border: solid 1px red;
+    }
 
 `;
 
@@ -123,13 +139,6 @@ const Calendar = (props) => {
     
     const prevMonth = () => {
         setCurrentDate(subMonths(currentDate, 1));
-    }
-    const onClickEvent = day => {
-        const dateFormat = 'MMM d';
-        let dayFormatted = format(day, dateFormat)
-        setSelectedDate(day);
-        onDateClick(dayFormatted)
-        closeCalendar();
     }
 
     const header = () => {
@@ -178,9 +187,8 @@ const Calendar = (props) => {
 
                 days.push(
                     <Cell
-                        // className={`column cell ${!isSameMonth(day, monthStart)
-                        // ? "disabled" : isSameDay(day, selectedDate) 
-                        // ? "selected" : "" }`} 
+                        // className={`${!isSameMonth(day, monthStart)
+                        // ? "disabled" : "" }`} 
                         key={day} 
                         onClick={() => onClickEvent(toDate(cloneDay))}
                     > 
@@ -198,7 +206,14 @@ const Calendar = (props) => {
 
        return <div>{rows}</div>;
     }
-    
+
+    const onClickEvent = day => {
+        const dateFormat = 'MMM d';
+        let dayFormatted = format(day, dateFormat)
+        setSelectedDate('i am being updates', day);
+        onDateClick(dayFormatted)
+        closeCalendar();
+    }
     return (
         <CalendarWrapper>
             {/* <Body> */}
@@ -214,7 +229,7 @@ const Calendar = (props) => {
             {/* </Body> */}
         </CalendarWrapper>
     )  
-    
+
 }
 
 export default Calendar;
