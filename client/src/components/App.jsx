@@ -6,8 +6,9 @@ import TimeSelector from './TimeSelector';
 import styled from 'styled-components';
 import Title from './Title';
 import DateSelector from './DateSelector';
-import Button from './Button.jsx';
+import Button from './Button';
 import TimesList from './TimesList';
+import { hot } from 'react-hot-loader/root';
 
 const AppContainer = styled.div`
   box-shadow: 0 2px 8px rgba(153,153,153,.4);
@@ -190,4 +191,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default hot(App);
